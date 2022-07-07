@@ -16,7 +16,7 @@ function Login({navigation}) {
     const [failed,setFailed] = useState(false)
     const user = useSelector(state => state.user.user)
     const dispatch = useDispatch()
-    
+    console.log(user);
     useFocusEffect(()=>{
       if(user){
         return navigation.navigate("Home",{screen:"Profile"})

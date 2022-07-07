@@ -1,14 +1,19 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState,useEffect } from 'react'
 import {View,Text,StyleSheet,TouchableOpacity} from 'react-native'
 import {signOut} from 'firebase/auth'
 import auth from '../firebase/firebase'
+import {useDispatch,useSelector} from 'react-redux'
+import {removeUser} from '../redux/userSlice'
 function Profile({navigation}) {
-    const user = auth.currentUser
+    const user = useSelector(state=>state.user.user)
+    const dispatch = useDispatch()
     const [isFailed,setIsFailed] = useState(false);
+    
     const handleSignOut = ()=>{
         signOut(auth)
         .then(()=>{
-            navigation.navigate("Login",{screen:"Login"})
+            dispatch(removeUser())
+            return navigation.navigate("Login",{screen:"Login"})
         })
         .catch((error) =>{
             console.log(error)
@@ -16,7 +21,7 @@ function Profile({navigation}) {
     }
     return (
         <View style = {styles.profileContainer}>
-            <Text>{user.email}</Text>
+            <Text>{user ? user.email : ""}</Text>
             {
                 isFailed 
                     ?
