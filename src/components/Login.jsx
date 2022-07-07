@@ -1,32 +1,58 @@
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text,TextInput,View,Image,Button,TouchableOpacity, Animated } from 'react-native';
+import { useEffect, useState } from 'react';
+import { StyleSheet, Text,TextInput,View,TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { EvilIcons } from '@expo/vector-icons';
 import Spinner from './AnimationComponents/Spinner'
 import {signInWithEmailAndPassword,onAuthStateChanged} from "firebase/auth"
 import auth from '../firebase/firebase'
+import { useSelector,useDispatch } from 'react-redux';
+import {addUser} from '../redux/userSlice'
+import { useFocusEffect } from '@react-navigation/native';
+
 function Login({navigation}) {
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
     const [isFetching,setIsFetching] = useState(false)
     const [failed,setFailed] = useState(false)
+    const user = useSelector(state => state.user.user)
+    const dispatch = useDispatch()
     
+    useFocusEffect(()=>{
+      if(user){
+        return navigation.navigate("Home",{screen:"Profile"})
+      }
+      return;
+    })
+
     useEffect(()=>{
-      const unsubscribe = onAuthStateChanged(auth,(user)=>{
-        if(user){
+      const unsubscribe = onAuthStateChanged(auth,(userCredentials)=>{
+        if(userCredentials){
+          if(user === null){
+            const newUser = {
+              email:userCredentials.email,
+              id:userCredentials.uid,
+            }
+            dispatch(addUser(newUser))
+          }
           navigation.navigate("Home",{screen:"Profile"})
         }
       })
       return unsubscribe()
     },[])
+
     const handleRegister = (e)=>{
         navigation.navigate("Register")
     }
+
     const handleLogin = (e)=>{
       setIsFetching(true)
       signInWithEmailAndPassword(auth,email,password)
-      .then((user)=>{
+      .then((userCredentials)=>{
+        const user = {
+          email:email,
+          id:userCredentials.user.uid,
+        }
+        dispatch(addUser(user))
         setIsFetching(false)
         navigation.navigate("Home",{screen:"Profile"})
       })
@@ -36,6 +62,7 @@ function Login({navigation}) {
         console.log(error)
       })
     }
+
     return (
       <View style={styles.container}>
         <View style = {styles.cardHeader}>
