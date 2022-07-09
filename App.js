@@ -1,21 +1,18 @@
-import Login from './src/components/Login';
+import Login from './src/screens/Login';
 import {NavigationContainer} from '@react-navigation/native'
 import {createNativeStackNavigator} from '@react-navigation/native-stack'
-import Profile from './src/components/Profile';
-import Register from './src/components/Register';
+import Profile from './src/screens/Profile';
+import Register from './src/screens/Register';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-import Excercises from './src/components/Excercises'
-import Programs from './src/components/Programs'
-import auth from './src/firebase/firebase';
+import Programs from './src/screens/Programs'
 import store from "./src/redux/store"
 import {Provider} from 'react-redux';
-
+import CategoryStack from './src/Navigators/CategoryStack'
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
-const user = auth.currentUser;
 
 const HomeStack = ()=>{
   return(
@@ -28,7 +25,7 @@ const HomeStack = ()=>{
             if(route.name === "Programs"){
               return <AntDesign name="profile" size={24} color={iconColor}/>
             }
-            if(route.name === "Excercises"){
+            if(route.name === "Caterories"){
               return <MaterialCommunityIcons name="dumbbell" size={24} color={iconColor} />
             }
             if(route.name === "Profile"){
@@ -43,8 +40,8 @@ const HomeStack = ()=>{
         name='Programs'
         component={Programs}/>
       <Tab.Screen
-        name="Excercises"
-        component={Excercises}/>
+        name="Caterories"
+        component={CategoryStack}/>
       <Tab.Screen
           name='Profile' 
           component={Profile}

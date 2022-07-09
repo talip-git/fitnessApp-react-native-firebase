@@ -4,8 +4,7 @@ import auth,{db} from '../firebase/firebase'
 import { createUserWithEmailAndPassword} from 'firebase/auth';
 import {doc,setDoc,query,where,collection, getDocs } from 'firebase/firestore';
 import { useState } from 'react';
-import Spinner from './AnimationComponents/Spinner';
-import { async } from '@firebase/util';
+import Spinner from '../Animations/Spinner';
 const Register = ({navigation}) => {
     const [username,setUsername] = useState("")
     const [email,setEmail] = useState("")

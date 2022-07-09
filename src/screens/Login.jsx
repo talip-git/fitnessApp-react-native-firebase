@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text,TextInput,View,TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import Spinner from './AnimationComponents/Spinner'
+import Spinner from '../Animations/Spinner'
 import {signInWithEmailAndPassword,onAuthStateChanged} from "firebase/auth"
 import auth from '../firebase/firebase'
 import { useSelector,useDispatch } from 'react-redux';
@@ -16,7 +16,7 @@ function Login({navigation}) {
     const [failed,setFailed] = useState(false)
     const user = useSelector(state => state.user.user)
     const dispatch = useDispatch()
-    console.log(user);
+    
     useFocusEffect(()=>{
       if(user){
         return navigation.navigate("Home",{screen:"Profile"})
